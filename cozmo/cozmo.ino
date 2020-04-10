@@ -13,7 +13,7 @@ void setup() {
   myservo[0].attach(4); //left hand
   myservo[1].attach(7); //right hand
   myservo[2].attach(8); //neck
-  myservo[3].attach(10); //hand
+  myservo[3].attach(10); //head
   rst();
 }
 
@@ -60,10 +60,14 @@ void loop() {
     else if(x=='10')
     {
       char y=Serial.read();
-      if(y=='l')
-      tracking(-1);
-      else
-      tracking(1);
+      if(y=='u')
+      tracking(3, 1);
+      else if(y=='d')
+      tracking(3, -1);
+      else if(y=='l')
+      tracking(2, -1);
+      else if(y=='l')
+      tracking(2, 1);
     }
     else
     {
@@ -250,8 +254,8 @@ void sto()
   analogWrite(m1,0);
   analogWrite(m2,0);
 }
-void tracking(int an) // track horizontal face movement
+void tracking(int servo_number, int an) // track horizontal face movement
 {
-  ang[2]=myservo[2].read();
-  myservo[2].write(ang+an);
+  ang[servo_number]=myservo[servo_number].read();
+  myservo[servo_number].write(ang+an);
 }

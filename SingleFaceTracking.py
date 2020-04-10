@@ -23,30 +23,33 @@ def detect(grs, org):
 
 video = cv2.VideoCapture(0)
 
-while True:
-    _,org = video.read()
-    grs = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
-    center = detectCoordinates(grs, org)
-    canvas = detect(grs,org)
-    cv2.imshow('Video', canvas)
-    if center:
-        xx = center[0]
-        yy = center[1]
-        feild_of_vision = xx**2 + yy**2 - 640*xx - 480*yy + 157500
-        if(xx>320 and feild_of_vision>0):
-            print('Move head towards Right')
-            #print(feild_of_vision)
-        if(xx<320 and feild_of_vision>0):
-            print('Move head towards Left')
-            #print(feild_of_vision)
-        if(yy<240 and feild_of_vision>0):
-            print('Move head Upwards')
-            #print(feild_of_vision)
-        if(yy>240 and feild_of_vision>0):
-            print('Move head Downwards')
-            #print(feild_of_vision)
-    if cv2.waitKey(1) & 0xff==ord('q'):
-        break
+def track():
+    while True:
+        _,org = video.read()
+        grs = cv2.cvtColor(org, cv2.COLOR_BGR2GRAY)
+        center = detectCoordinates(grs, org)
+        canvas = detect(grs,org)
+        cv2.imshow('Video', canvas)
+        if center:
+            xx = center[0]
+            yy = center[1]
+            feild_of_vision = xx**2 + yy**2 - 640*xx - 480*yy + 157500
+            if(xx>320 and feild_of_vision>0):
+                print('Move head towards Right')
+                return 'r'
+            if(xx<320 and feild_of_vision>0):
+                print('Move head towards Left')
+                return 'l'
+            if(yy<240 and feild_of_vision>0):
+                print('Move head Upwards')
+                return 'u'
+            if(yy>240 and feild_of_vision>0):
+                print('Move head Downwards')
+                return 'd'
+            if(feild_of_vision<=0):
+                return 'o'
+        if cv2.waitKey(1) & 0xff==ord('q'):
+            break
     
 video.release()
 cv2.destroyAllWindows()
